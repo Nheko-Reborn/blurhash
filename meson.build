@@ -15,6 +15,9 @@ tests = executable('blurhash-tests',
            install : false)
 test('blurhash-tests', tests)
 
+bench = executable('blurhash-decode-bench', 'blurhash-decode-bench.cpp', link_with: lib, install: false)
+benchmark('blurhash-decode-bench', bench, timeout: 60, should_fail: true)
+
 executable('blurhash2bmp', 'blurhash2bmp.cpp', link_with: lib, install: true)
 executable('blurhash', 'image2blurhash.cpp', link_with: lib, install: true)
 
