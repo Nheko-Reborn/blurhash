@@ -4,16 +4,19 @@ project('blurhash', 'cpp',
 
 lib = static_library('blurhash',
            'blurhash.cpp',
+           include_directories: '.',
            install : true)
 
-doctest_dep = dependency('doctest', fallback : ['doctest', 'doctest_dep'])
+if get_option('tests')
+  doctest_dep = dependency('doctest', required: true, fallback : ['onqtam-doctest', 'doctest_dep'])
 
-tests = executable('blurhash-tests',
-           'blurhash.cpp',
-	   cpp_args : '-DDOCTEST_CONFIG_IMPLEMENT_WITH_MAIN',
-	   dependencies: doctest_dep,
-           install : false)
-test('blurhash-tests', tests)
+  tests = executable('blurhash-tests',
+    'blurhash.cpp',
+    cpp_args : '-DDOCTEST_CONFIG_IMPLEMENT_WITH_MAIN',
+    dependencies: doctest_dep,
+    install : false)
+  test('blurhash-tests', tests)
+endif
 
 bench = executable('blurhash-decode-bench', 'blurhash-decode-bench.cpp', link_with: lib, install: false)
 benchmark('blurhash-decode-bench', bench, timeout: 60, should_fail: true)
@@ -30,3 +33,6 @@ pkg.generate(libraries : [lib],
              name : meson.project_name(),
              filebase : meson.project_name(),
              description : 'C++ blurhash encoder/decoder')
+
+blurhash_dep = declare_dependency(link_with: lib, include_directories: '.')
+meson.override_dependency('blurhash', blurhash_dep)
