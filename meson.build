@@ -18,11 +18,15 @@ if get_option('tests')
   test('blurhash-tests', tests)
 endif
 
-bench = executable('blurhash-decode-bench', 'blurhash-decode-bench.cpp', link_with: lib, install: false)
-benchmark('blurhash-decode-bench', bench, timeout: 60, should_fail: true)
+if get_option('benchmarks')
+  bench = executable('blurhash-decode-bench', 'blurhash-decode-bench.cpp', link_with: lib, install: false)
+  benchmark('blurhash-decode-bench', bench, timeout: 60, should_fail: true)
+endif
 
-executable('blurhash2bmp', 'blurhash2bmp.cpp', link_with: lib, install: true)
-executable('blurhash', 'image2blurhash.cpp', link_with: lib, install: true)
+if get_option('examples')
+  executable('blurhash2bmp', 'blurhash2bmp.cpp', link_with: lib, install: true)
+  executable('blurhash', 'image2blurhash.cpp', link_with: lib, install: true)
+endif
 
 install_headers('blurhash.hpp')
 

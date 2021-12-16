@@ -18,12 +18,12 @@ main(int argc, char **argv)
         int height = 0, width = 0;
 
         std::string_view width_str{argv[2]}, height_str{argv[3]};
-        std::from_chars(height_str.begin(), height_str.end(), height);
+        std::from_chars(height_str.data(), height_str.data()+height_str.size(), height);
         if (height <= 0) {
                 std::cerr << "Invalid height.";
                 return -2;
         }
-        std::from_chars(width_str.begin(), width_str.end(), width);
+        std::from_chars(width_str.data(), width_str.data()+width_str.size(), width);
         if (width <= 0) {
                 std::cerr << "Invalid width.";
                 return -2;
