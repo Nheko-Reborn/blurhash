@@ -315,28 +315,32 @@ encode(unsigned char *image, size_t width, size_t height, int components_x, int 
         std::vector<float> basis_x = bases_for(width, components_x);
         std::vector<float> basis_y = bases_for(height, components_y);
 
-        std::vector<Color> factors;
-        factors.reserve(components_x * components_y);
-        for (size_t ny = 0; ny < size_t(components_y); ny++) {
-                for (size_t nx = 0; nx < size_t(components_x); nx++) {
-                        Color c{};
-                        float normalisation = (components_x == 0 && components_y == 0) ? 1 : 2;
+        std::vector<Color> factors(components_x * components_y, Color{});
+        for (size_t y = 0; y < height; y++) {
+                for (size_t x = 0; x < width; x++) {
+                        Color linear{srgbToLinear(image[3 * x + 0 + y * width * 3]),
+                                     srgbToLinear(image[3 * x + 1 + y * width * 3]),
+                                     srgbToLinear(image[3 * x + 2 + y * width * 3])};
 
-                        for (size_t y = 0; y < height; y++) {
-                                for (size_t x = 0; x < width; x++) {
+                        // other half of normalization.
+                        linear *= 1.f / width;
+
+                        for (size_t ny = 0; ny < size_t(components_y); ny++) {
+                                for (size_t nx = 0; nx < size_t(components_x); nx++) {
                                         float basis = basis_x[x * size_t(components_x) + nx] *
                                                       basis_y[y * size_t(components_y) + ny];
-                                        Color temp{srgbToLinear(image[3 * x + 0 + y * width * 3]),
-                                                   srgbToLinear(image[3 * x + 1 + y * width * 3]),
-                                                   srgbToLinear(image[3 * x + 2 + y * width * 3])};
-                                        c += temp * basis;
+                                        factors[ny * components_x + nx] += linear * basis;
                                 }
                         }
-
-                        float scale = normalisation / (width * height);
-                        c *= scale;
-                        factors.push_back(c);
                 }
+        }
+
+        // scale by normalization. Half the scaling is done in the previous loop to prevent going
+        // too far outside the float range.
+        for (size_t i = 0; i < factors.size(); i++) {
+                float normalisation = (i == 0) ? 1 : 2;
+                float scale         = normalisation / (height);
+                factors[i] *= scale;
         }
 
         assert(factors.size() > 0);
