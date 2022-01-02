@@ -273,7 +273,7 @@ decode(std::string_view blurhash, size_t width, size_t height, size_t bytesPerPi
                 return {};
         }
 
-        i.image.reserve(height * width * bytesPerPixel);
+        i.image = decltype(i.image)(height * width * bytesPerPixel, 255);
 
         std::vector<float> basis_x = bases_for(width, components.x);
         std::vector<float> basis_y = bases_for(height, components.y);
@@ -290,12 +290,12 @@ decode(std::string_view blurhash, size_t width, size_t height, size_t bytesPerPi
                                 }
                         }
 
-                        i.image.push_back(static_cast<unsigned char>(linearToSrgb(c.r)));
-                        i.image.push_back(static_cast<unsigned char>(linearToSrgb(c.g)));
-                        i.image.push_back(static_cast<unsigned char>(linearToSrgb(c.b)));
-
-                        for (size_t p = 3; p < bytesPerPixel; p++)
-                                i.image.push_back(255);
+                        i.image[(y * width + x) * bytesPerPixel + 0] =
+                          static_cast<unsigned char>(linearToSrgb(c.r));
+                        i.image[(y * width + x) * bytesPerPixel + 1] =
+                          static_cast<unsigned char>(linearToSrgb(c.g));
+                        i.image[(y * width + x) * bytesPerPixel + 2] =
+                          static_cast<unsigned char>(linearToSrgb(c.b));
                 }
         }
 
