@@ -1,6 +1,6 @@
 project('blurhash', 'cpp',
   version : '0.1',
-  default_options : ['warning_level=3', 'cpp_std=c++17'])
+  default_options : ['warning_level=3', 'cpp_std=c++20'])
 
 lib = static_library('blurhash',
            'blurhash.cpp',
@@ -8,7 +8,7 @@ lib = static_library('blurhash',
            install : true)
 
 if get_option('tests')
-  doctest_dep = dependency('doctest', required: true, fallback : ['onqtam-doctest', 'doctest_dep'])
+  doctest_dep = dependency('doctest', required: true)
 
   tests = executable('blurhash-tests',
     'blurhash.cpp',

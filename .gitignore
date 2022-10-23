@@ -1,5 +1,17 @@
+# vim
 *.swp
 .exrc
 
-build*/
+# test files
 *.bmp
+
+# clangd cache
+.cache
+
+# tooling
+/compile_commands.json
+
+# wraps
+/subprojects/*
+!/subprojects/doctest.wrap
+

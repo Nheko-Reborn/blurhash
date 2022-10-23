@@ -4,6 +4,7 @@
 #include <array>
 #include <cassert>
 #include <cmath>
+#include <numbers>
 #include <stdexcept>
 
 #ifdef DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
@@ -17,9 +18,6 @@
 using namespace std::literals;
 
 namespace {
-template<class T>
-T pi = 3.14159265358979323846;
-
 constexpr std::array<char, 84> int_to_b83{
   "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#$%*+,-.:;=?@[]^_{|}~"};
 
@@ -234,7 +232,7 @@ std::vector<float>
 bases_for(size_t dimension, size_t components)
 {
         std::vector<float> bases(dimension * components, 0.f);
-        auto scale = pi<float> / float(dimension);
+        auto scale = std::numbers::pi_v<float> / float(dimension);
         for (size_t x = 0; x < dimension; x++) {
                 for (size_t nx = 0; nx < size_t(components); nx++) {
                         bases[x * components + nx] = std::cos(scale * float(nx * x));
