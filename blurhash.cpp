@@ -91,7 +91,7 @@ decode83(std::string_view value)
 float
 decodeMaxAC(int quantizedMaxAC) noexcept
 {
-        return (quantizedMaxAC + 1) / 166.;
+        return static_cast<float>(quantizedMaxAC + 1) / 166.f;
 }
 
 float
@@ -121,7 +121,7 @@ srgbToLinear(int value) noexcept
                         return std::pow((x + 0.055f) / 1.055f, 2.4f);
         };
 
-        return srgbToLinearF(value / 255.f);
+        return srgbToLinearF(static_cast<float>(value) / 255.f);
 }
 
 int
@@ -321,7 +321,7 @@ encode(unsigned char *image, size_t width, size_t height, int components_x, int 
                                      srgbToLinear(image[3 * x + 2 + y * width * 3])};
 
                         // other half of normalization.
-                        linear *= 1.f / width;
+                        linear *= 1.f / static_cast<float>(width);
 
                         for (size_t ny = 0; ny < size_t(components_y); ny++) {
                                 for (size_t nx = 0; nx < size_t(components_x); nx++) {
@@ -337,7 +337,7 @@ encode(unsigned char *image, size_t width, size_t height, int components_x, int 
         // too far outside the float range.
         for (size_t i = 0; i < factors.size(); i++) {
                 float normalisation = (i == 0) ? 1 : 2;
-                float scale         = normalisation / (height);
+                float scale         = normalisation / static_cast<float>(height);
                 factors[i] *= scale;
         }
 
