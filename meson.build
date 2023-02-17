@@ -2,10 +2,15 @@ project('blurhash', 'cpp',
   version : '0.2.0',
   default_options : ['warning_level=3', 'cpp_std=c++20'])
 
+# currently minor versions should be ABI stable
+version_parts = meson.project_version().split('.')
+soversion = version_parts.get(0) + '.' + version_parts.get(1)
+
 lib = library('blurhash',
            'blurhash.cpp',
            include_directories: '.',
            version: meson.project_version(),
+           soversion: soversion,
            install : true)
 
 if get_option('tests')
