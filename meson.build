@@ -2,9 +2,10 @@ project('blurhash', 'cpp',
   version : '0.1',
   default_options : ['warning_level=3', 'cpp_std=c++20'])
 
-lib = static_library('blurhash',
+lib = library('blurhash',
            'blurhash.cpp',
            include_directories: '.',
+           version: meson.project_version(),
            install : true)
 
 if get_option('tests')
