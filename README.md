@@ -4,7 +4,7 @@ Simple encoder and decoder for [blurhashes](https://blurha.sh/). In large parts 
 
 ## Build Requirements
 
-- A C++17 compiler, specifically with support for parsing integers via `std::from_chars` and some other smaller features.
+- A C++20 compiler, specifically with support for parsing integers via `std::from_chars`, `std::numbers::pi_v` and some other smaller features.
 - The meson build system, if you don't want to embed the library into your project.
 
 ## Usage as a library
