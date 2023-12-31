@@ -1,3 +1,5 @@
+#include <cstdint>
+
 #include "blurhash.hpp"
 
 int
